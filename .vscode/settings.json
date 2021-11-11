@@ -1,0 +1,14 @@
+{
+    "liveServer.settings.port": 5503,
+    "fileheader.Author": "lt",
+    "fileheader.LastModifiedBy": "lt",
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[json]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[html]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    }
+}

@@ -1,0 +1,6 @@
+{
+    // https://es6.ruanyifeng.com/#docs/intro
+    "presets": ["@babel/preset-env"], //es2015转es5
+    "plugins": ["@babel/plugin-transform-runtime","@babel/plugin-proposal-class-properties"] // 1.解决 Uncaught ReferenceError: regeneratorRuntime is not defined https://www.cnblogs.com/jichi/p/13469305.html  2.解决不能打包class静态类静态属性
+
+ }
