@@ -51,6 +51,7 @@ class WebGLRenderer {
         // add mvp
         material.uniforms.projectionMatrix = camera.projectionMatrix.elements
         material.uniforms.viewMatrix = camera.viewMatrix.elements
+        material.uniforms.modelMatrix = object.matrixWorld.elements
 
         const webglUniforms = new WebGLUniforms()
         const uniformSetters = webglUniforms._createUniformSetters(gl, program)

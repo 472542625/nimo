@@ -3,5 +3,5 @@ module.exports = {
     trailingComma: 'es5', // 末尾属性添加,
     tabWidth: 4, // tab 为2个空格长度
     semi: false, // 不需要分号
-    printWidth: 150, // 单行长度
+    printWidth: 200, // 单行长度
 }

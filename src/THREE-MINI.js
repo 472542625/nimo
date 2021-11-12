@@ -8,6 +8,8 @@ import { Scene } from './scenes/Scene'
 //core
 import { Object3D } from './core/Object3D'
 
+import { Mesh } from './objects/Mesh'
+
 //math
 import { Matrix4, Vector4 } from './math/Matrix4'
 
@@ -26,7 +28,7 @@ let THREE = {
     WebGLAttributes,
 
     Scene,
-
+    Mesh,
     Object3D,
 
     Matrix4,
