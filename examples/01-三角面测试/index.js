@@ -60,12 +60,12 @@ let mian1 = {
 }
 let scene = new THREE.Scene()
 scene.add(mian1)
-
+let camera = new THREE.PerspectiveCamera()
 // 循环渲染
 function animate() {
     requestAnimationFrame(animate)
     // renderer.mvpMatrix.rotate(-1, 0, 1, 0)
-    renderer.render(scene)
+    renderer.render(scene, camera)
 }
 
 animate()

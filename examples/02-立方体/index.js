@@ -17,10 +17,11 @@ let material = new THREE.ShaderMaterial({
     attribute vec4 position;
     attribute vec4 color;
     varying vec4 v_color;
-    uniform mat4 u_MvpMatrix;
+    uniform mat4 projectionMatrix;
+    uniform mat4 viewMatrix;
         void main() {
         v_color = color;
-        gl_Position = u_MvpMatrix * vec4(position);
+        gl_Position = projectionMatrix * viewMatrix * vec4(position);
     }
     `,
     uniforms: {
@@ -128,12 +129,13 @@ let meshbox = {
 }
 let scene = new THREE.Scene()
 scene.add(meshbox)
+let camera = new THREE.PerspectiveCamera()
 
 // 循环渲染 旋转立方体
 function animate() {
     requestAnimationFrame(animate)
-    renderer.mvpMatrix.rotate(-1, 0, 1, 0)
-    renderer.render(scene)
+    // renderer.mvpMatrix.rotate(-1, 0, 1, 0)
+    renderer.render(scene, camera)
 }
 
 animate()

@@ -17,6 +17,9 @@ import { ShaderMaterial } from './materials/ShaderMaterial'
 //geometries
 import { BufferGeometry } from './geometries/BufferGeometry'
 import { CubeGeometry } from './geometries/CubeGeometry'
+
+//camear
+import { PerspectiveCamera } from './camera/PerspectiveCamera'
 let THREE = {
     WebGLRenderer,
 
@@ -34,5 +37,7 @@ let THREE = {
 
     BufferGeometry,
     CubeGeometry,
+
+    PerspectiveCamera,
 }
 export { THREE }

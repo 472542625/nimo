@@ -9,10 +9,6 @@ class WebGLRenderer {
         this.domElement = canvas
         this.gl = this._getContext('webgl')
         this.programCache = new WebGLPrograms(this)
-
-        this.mvpMatrix = new Matrix4()
-        this.mvpMatrix.setPerspective(30, 1, 1, 100)
-        this.mvpMatrix.lookAt(3, 3, 7, 0, 0, 0, 0, 1, 0)
     }
     _createCanvasElement() {
         const canvas = document.createElementNS('http://www.w3.org/1999/xhtml', 'canvas')
@@ -33,19 +29,19 @@ class WebGLRenderer {
         gl.clearColor(0.0, 0.0, 0.0, 1.0)
         // Clear the canvas AND the depth buffer.
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
-        let children = scene.children
 
         // TODO sort scene mesh
-        this._renderObjects(children)
+        this._renderObjects(scene, camera)
     }
 
-    _renderObjects(children) {
+    _renderObjects(scene, camera) {
+        let children = scene.children
         for (const object of children) {
-            this._renderBufferDirect(object)
+            this._renderBufferDirect(object, camera)
         }
     }
 
-    _renderBufferDirect(object) {
+    _renderBufferDirect(object, camera) {
         const gl = this.gl
         const material = object.material
         const program = this._setProgram(object)
@@ -53,7 +49,8 @@ class WebGLRenderer {
         gl.useProgram(program)
 
         // add mvp
-        material.uniforms.u_MvpMatrix = this.mvpMatrix.elements
+        material.uniforms.projectionMatrix = camera.projectionMatrix.elements
+        material.uniforms.viewMatrix = camera.viewMatrix.elements
 
         const webglUniforms = new WebGLUniforms()
         const uniformSetters = webglUniforms._createUniformSetters(gl, program)
