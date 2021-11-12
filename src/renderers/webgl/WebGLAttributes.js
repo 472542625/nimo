@@ -7,6 +7,7 @@ class WebGLAttributes {
             return function (b) {
                 if (b.value) {
                     gl.disableVertexAttribArray(index)
+                    debugger
                     switch (b.value.length) {
                         case 4:
                             gl.vertexAttrib4fv(index, b.value)

@@ -67,5 +67,32 @@ class WebGLProgram {
 
         return shader
     }
+
+    //
+
+    _fetchAttributeLocations(gl, program) {
+        const attributes = {}
+
+        const n = gl.getProgramParameter(program, gl.ACTIVE_ATTRIBUTES)
+
+        for (let i = 0; i < n; i++) {
+            const info = gl.getActiveAttrib(program, i)
+            const name = info.name
+
+            // console.log( 'THREE.WebGLProgram: ACTIVE VERTEX ATTRIBUTE:', name, i );
+
+            attributes[name] = gl.getAttribLocation(program, name)
+        }
+
+        return attributes
+    }
+
+    _getAttributes = function () {
+        if (this.cachedAttributes === undefined) {
+            this.cachedAttributes = this._fetchAttributeLocations(gl, program)
+        }
+
+        return this.cachedAttributes
+    }
 }
 export { WebGLProgram }

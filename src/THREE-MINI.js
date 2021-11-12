@@ -1,8 +1,4 @@
 import { WebGLRenderer } from './renderers/WebGLRenderer'
-
-import { WebGLCapabilities } from './renderers/webgl/WebGLCapabilities'
-import { WebGLBufferRenderer } from './renderers/webgl/WebGLBufferRenderer'
-import { WebGLIndexedBufferRenderer } from './renderers/webgl/WebGLIndexedBufferRenderer'
 import { WebGLUniforms } from './renderers/webgl/WebGLUniforms'
 import { WebGLAttributes } from './renderers/webgl/WebGLAttributes'
 
@@ -19,13 +15,11 @@ import { Matrix4, Vector4 } from './math/Matrix4'
 import { ShaderMaterial } from './materials/ShaderMaterial'
 
 //geometries
+import { BufferGeometry } from './geometries/BufferGeometry'
 import { CubeGeometry } from './geometries/CubeGeometry'
 let THREE = {
     WebGLRenderer,
 
-    WebGLCapabilities,
-    WebGLBufferRenderer,
-    WebGLIndexedBufferRenderer,
     WebGLUniforms,
     WebGLAttributes,
 
@@ -38,6 +32,7 @@ let THREE = {
 
     ShaderMaterial,
 
+    BufferGeometry,
     CubeGeometry,
 }
 export { THREE }
