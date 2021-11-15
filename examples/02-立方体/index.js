@@ -8,15 +8,15 @@ let material = new THREE.ShaderMaterial({
     precision mediump float;//123
    // uniform vec4 color;
     uniform float opacity;
-    varying vec4 v_color;
+    varying vec3 v_color;
     void main(){
-        gl_FragColor = v_color;
+        gl_FragColor = vec4(v_color.xyz,1.0);
     }    
     `,
     vertexShader: `
     attribute vec4 position;
-    attribute vec4 color;
-    varying vec4 v_color;
+    attribute vec3 color;
+    varying vec3 v_color;
     uniform mat4 projectionMatrix;
     uniform mat4 viewMatrix;
     uniform mat4 modelMatrix;
@@ -125,13 +125,21 @@ let geometry = new THREE.BufferGeometry().createBufferInfoFromArrays(gl, {
     ]),
 })
 let mesh = new THREE.Mesh(geometry, material)
-let camera = new THREE.PerspectiveCamera()
+let mesh2 = new THREE.Mesh(geometry, material)
+mesh2.translateY(2)
+mesh2.translateZ(2)
+window.mesh = mesh
+let camera = new THREE.PerspectiveCamera(50, 1, 0.1, 100) //window.innerWidth / window.innerHeight
+camera.position.set(3, 3, 7)
+// camera.position.set(0, 0, 10)
+camera.lookAt(0, 0, 0)
 let scene = new THREE.Scene()
 scene.add(mesh)
-// 循环渲染 旋转立方体
+scene.add(mesh2)
 function animate() {
     requestAnimationFrame(animate)
     mesh.rotateZ(-1)
+    mesh2.rotateZ(1)
     renderer.render(scene, camera)
 }
 

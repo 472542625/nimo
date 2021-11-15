@@ -1,7 +1,7 @@
 import { WebGLUniforms } from './webgl/WebGLUniforms'
 import { WebGLAttributes } from './webgl/WebGLAttributes'
 import { WebGLPrograms } from './webgl/WebGLPrograms'
-import { Matrix4 } from '../math/Matrix4'
+import { WebGLProperties } from './webgl/WebGLProperties'
 class WebGLRenderer {
     constructor(opt) {
         let _opt = opt || {}
@@ -9,6 +9,7 @@ class WebGLRenderer {
         this.domElement = canvas
         this.gl = this._getContext('webgl')
         this.programCache = new WebGLPrograms(this)
+        this.properties = new WebGLProperties()
     }
     _createCanvasElement() {
         const canvas = document.createElementNS('http://www.w3.org/1999/xhtml', 'canvas')
@@ -37,29 +38,21 @@ class WebGLRenderer {
     _renderObjects(scene, camera) {
         let children = scene.children
         for (const object of children) {
-            this._renderBufferDirect(object, camera)
+            this._renderBufferDirect(camera, object)
         }
     }
 
-    _renderBufferDirect(object, camera) {
+    _renderBufferDirect(camera, object) {
         const gl = this.gl
-        const material = object.material
-        const program = this._setProgram(object)
-        // TODO 判断program是否和上一个一致，一致就不需要gl.useProgram // state.useProgram( program.program )
-        gl.useProgram(program)
+        const program = this._setProgram(camera, object)
+        // TODO
+        //state.setMaterial( material, frontFaceCW );//主要根据material里面的有关于测试相关的信息写入，如深度检测，深度写等等
 
-        // add mvp
-        material.uniforms.projectionMatrix = camera.projectionMatrix.elements
-        material.uniforms.viewMatrix = camera.viewMatrix.elements
-        material.uniforms.modelMatrix = object.matrixWorld.elements
-
-        const webglUniforms = new WebGLUniforms()
-        const uniformSetters = webglUniforms._createUniformSetters(gl, program)
-
+        // bind attributes
+        // TODO webgl2 VAO
         const webglAttributes = new WebGLAttributes()
         const attribSetters = webglAttributes._createAttributeSetters(gl, program)
         webglAttributes._setBuffersAndAttributes(gl, attribSetters, object.geometry)
-        webglUniforms._setUniforms(uniformSetters, material.uniforms)
 
         // gl.drawArrays(gl.TRIANGLES, 0, object.geometry.numElements)
         gl.drawElements(gl.TRIANGLES, object.geometry.numElements, gl.UNSIGNED_BYTE, 0)
@@ -75,13 +68,75 @@ class WebGLRenderer {
         // gl.drawArrays(gl.TRIANGLES, 0, n)
     }
 
-    _setProgram(object) {
-        const material = object.material
-        const programCache = this.programCache
-        const parameters = programCache.getParameters(material)
-        const programCacheKey = programCache.getProgramCacheKey(parameters)
-        const program = programCache.acquireProgram(material, programCacheKey)
+    _setProgram(camera, object) {
+        const gl = this.gl
+        let material = object.material
+        let programCache = this.programCache
+        let parameters = programCache.getParameters(material)
+        let programCacheKey = programCache.getProgramCacheKey(parameters)
+        let program = programCache.acquireProgram(material, programCacheKey)
+
+        // add mvp
+        material.uniforms.projectionMatrix = camera.projectionMatrix.elements
+        material.uniforms.viewMatrix = camera.viewMatrix.elements
+        material.uniforms.modelMatrix = object.matrixWorld.elements
+
+        const webglUniforms = new WebGLUniforms()
+        const uniformSetters = webglUniforms._createUniformSetters(gl, program)
+        webglUniforms._setUniforms(uniformSetters, material.uniforms)
+
+        // TODO 判断program是否和上一个一致，一致就不需要gl.useProgram // state.useProgram( program.program )
+        gl.useProgram(program)
         return program
     }
+
+    // _setProgram2(object) {
+    //     let material = object.material
+    //     let properties = this.properties
+    //     let materialProperties = properties.get(material) // new material is {}
+    //     let needsProgramChange = false
+    //     if (material.version === materialProperties.__version) {
+    //     } else {
+    //         needsProgramChange = true
+    //         materialProperties.__version = material.version
+    //     }
+    //     let program = materialProperties.currentProgram
+    //     if (needsProgramChange === true) {
+    //         program = _getProgram(material, scene, object)
+    //     }
+    //     return program
+    // }
+
+    // _getProgram(object) {
+    //     let material = object.material
+    //     let properties = this.properties
+    //     let programCache = this.programCache
+    //     let materialProperties = properties.get(material)
+    //     let parameters = programCache.getParameters(material)
+    //     let programCacheKey = programCache.getProgramCacheKey(parameters)
+    //     let programs = materialProperties.programs
+    //     if (programs === undefined) {
+    //         // // new material
+    //         // material.addEventListener('dispose', onMaterialDispose)
+    //         programs = new Map()
+    //         materialProperties.programs = programs
+    //     }
+    //     let program = programs.get(programCacheKey)
+    //     if (program !== undefined) {
+    //         // early out if program and light state is identical
+
+    //         if (materialProperties.currentProgram === program && materialProperties.lightsStateVersion === lightsStateVersion) {
+    //             updateCommonMaterialProperties(material, parameters)
+
+    //             return program
+    //         }
+    //     } else {
+    //         parameters.uniforms = material.uniforms
+    //         program = programCache.acquireProgram(parameters, programCacheKey)
+    //         programs.set(programCacheKey, program)
+    //         materialProperties.uniforms = parameters.uniforms
+    //     }
+    //     const uniforms = materialProperties.uniforms
+    // }
 }
 export { WebGLRenderer }
