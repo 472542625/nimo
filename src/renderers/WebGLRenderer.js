@@ -90,7 +90,7 @@ class WebGLRenderer {
         return program
     }
 
-    // _setProgram2(object) {
+    // _setProgram2(camera, object) {
     //     let material = object.material
     //     let properties = this.properties
     //     let materialProperties = properties.get(material) // new material is {}
@@ -102,8 +102,10 @@ class WebGLRenderer {
     //     }
     //     let program = materialProperties.currentProgram
     //     if (needsProgramChange === true) {
-    //         program = _getProgram(material, scene, object)
+    //         program = this._getProgram(material, scene, object)
     //     }
+    //     // TODO 判断program是否和上一个一致，一致就不需要gl.useProgram // state.useProgram( program.program )
+    //     gl.useProgram(program)
     //     return program
     // }
 
@@ -123,13 +125,7 @@ class WebGLRenderer {
     //     }
     //     let program = programs.get(programCacheKey)
     //     if (program !== undefined) {
-    //         // early out if program and light state is identical
-
-    //         if (materialProperties.currentProgram === program && materialProperties.lightsStateVersion === lightsStateVersion) {
-    //             updateCommonMaterialProperties(material, parameters)
-
-    //             return program
-    //         }
+    //         return program
     //     } else {
     //         parameters.uniforms = material.uniforms
     //         program = programCache.acquireProgram(parameters, programCacheKey)
