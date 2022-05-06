@@ -12,6 +12,7 @@ import { Mesh } from './objects/Mesh'
 
 //math
 import { Matrix4, Vector4 } from './math/Matrix4'
+import { Vector2 } from './math/Vector2'
 
 //materials
 import { ShaderMaterial } from './materials/ShaderMaterial'
